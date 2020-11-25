@@ -20,6 +20,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     implementation 'org.mockito:mockito-core:3.6.0'
+    testImplementation("org.assertj:assertj-core:3.18.1")
 
     // Other Libraries
     implementation 'org.kodein.di:kodein-di:7.1.0'
