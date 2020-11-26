@@ -1,3 +1,12 @@
 # Project exclude paths
 /.gradle/
 /build/
+/assets/csv/filters.csv
+/assets/csv/food.csv
+/assets/csv/heaters.csv
+/assets/csv/species.csv
+/assets/csv/tanks.csv
+/gradlew
+/gradlew.bat
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties

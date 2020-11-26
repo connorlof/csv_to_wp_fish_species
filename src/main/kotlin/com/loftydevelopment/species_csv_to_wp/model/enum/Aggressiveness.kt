@@ -4,5 +4,4 @@ enum class Aggressiveness {
     AGGRESSIVE,
     SEMI_AGGRESSIVE,
     PEACEFUL,
-
 }
