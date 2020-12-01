@@ -56,4 +56,22 @@ data class Quantity(
 
         return output
     }
+
+    companion object {
+        fun fromString(string: String): Quantity {
+            var isInfinite = false
+            var isSingleValueOrGreater = false
+            var values: MutableList<Int> = mutableListOf()
+
+            isInfinite = string.trim() == "any"
+            isSingleValueOrGreater = string.contains("+")
+
+
+
+            return Quantity(isInfinite, isSingleValueOrGreater, values)
+        }
+    }
+//    val isInfinite: Boolean,
+//    val isSingleValueOrGreater: Boolean,
+//    val values: List<Int>,
 }

@@ -15,4 +15,14 @@ data class Range(
     override fun toString(): String {
         return "$start - $end"
     }
+
+    companion object {
+        fun fromString(string: String): Range {
+            val splitValues: List<String> = string.split("-")
+            val start = splitValues[0].trim().toDouble()
+            val end = splitValues[1].trim().toDouble()
+
+            return Range(start, end)
+        }
+    }
 }
