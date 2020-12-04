@@ -1,5 +1,8 @@
 package com.loftydevelopment.species_csv_to_wp.util
 
+import com.loftydevelopment.species_csv_to_wp.calculate.Conversions
+import kotlin.math.roundToInt
+
 data class Range(
     val start: Double,
     val end: Double,
@@ -13,7 +16,14 @@ data class Range(
     }
 
     override fun toString(): String {
-        return "$start - $end"
+        return "${start.roundToInt()} - ${end.roundToInt()}"
+    }
+
+    fun convertFahToCelsius(): Range {
+        val startAsCelsius = Conversions.fahToCelsius(start)
+        val endAsCelsius = Conversions.fahToCelsius(end)
+
+        return Range(startAsCelsius, endAsCelsius)
     }
 
     companion object {
