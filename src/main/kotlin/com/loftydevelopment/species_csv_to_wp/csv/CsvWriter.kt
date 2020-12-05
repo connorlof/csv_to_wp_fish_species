@@ -2,12 +2,18 @@ package com.loftydevelopment.species_csv_to_wp.csv
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import com.loftydevelopment.species_csv_to_wp.model.Species
+import com.loftydevelopment.species_csv_to_wp.repository.FilterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.FoodRepository
+import com.loftydevelopment.species_csv_to_wp.repository.HeaterRepository
+import com.loftydevelopment.species_csv_to_wp.repository.TankRepository
 import com.loftydevelopment.species_csv_to_wp.wordpress.SpeciesPostTemplate
 import com.loftydevelopment.species_csv_to_wp.wordpress.WordpressCsvRow
 
 class CsvWriter(
-        val foodRepository: FoodRepository,
+        private val foodRepository: FoodRepository,
+        private val tankRepository: TankRepository,
+        private val filterRepository: FilterRepository,
+        private val heaterRepository: HeaterRepository,
 ) {
     fun writeCsv(rows: List<List<String>>) = csvWriter().writeAll(rows, "posts_csv.csv", append = true)
 
@@ -35,7 +41,8 @@ class CsvWriter(
     private fun generateSpeciesRow(species: Species): List<String> {
 
         val postTitle = "${species.commonName} Care (${species.scientificName})"
-        val postHtml = SpeciesPostTemplate(species, foodRepository).generateOutputHtml()
+        val postHtml = SpeciesPostTemplate(species, foodRepository, tankRepository, filterRepository, heaterRepository)
+                .generateOutputHtml()
         val postType = "post"
         val postExcerpt = ""
         val postCategories = "Freshwater Species, ${species.speciesGroup.name}"

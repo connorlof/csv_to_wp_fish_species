@@ -1,14 +1,19 @@
 package com.loftydevelopment.species_csv_to_wp.wordpress
 
-import com.loftydevelopment.species_csv_to_wp.calculate.Conversions
-import com.loftydevelopment.species_csv_to_wp.calculate.FoodSelector
+import com.loftydevelopment.species_csv_to_wp.calculate.*
 import com.loftydevelopment.species_csv_to_wp.model.Food
 import com.loftydevelopment.species_csv_to_wp.model.Species
+import com.loftydevelopment.species_csv_to_wp.repository.FilterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.FoodRepository
+import com.loftydevelopment.species_csv_to_wp.repository.HeaterRepository
+import com.loftydevelopment.species_csv_to_wp.repository.TankRepository
 
 data class SpeciesPostTemplate(
         val species: Species,
         val foodRepository: FoodRepository,
+        val tankRepository: TankRepository,
+        val filterRepository: FilterRepository,
+        val heaterRepository: HeaterRepository
 ) {
     fun generateOutputHtml(): String {
         return "${topHeading()}\n\n" +
@@ -239,10 +244,23 @@ data class SpeciesPostTemplate(
     }
 
     private fun tankRecommendationsTable(): String {
-        // TODO products
-        val tankProductImageUrls = getFoodImageUrls()
-        val tankProductNames = getFoodNames()
-        val tankProductUrls = getFoodProductUrls()
+        // Tank recommendation
+        val tankRecommendation = TankSelector.selectTankForSpecies(species, tankRepository)
+        val tankImageUrl = tankRecommendation?.imageUrl ?: ""
+        val tankName = tankRecommendation?.name ?: ""
+        val tankProductUrl = tankRecommendation?.productUrl ?: ""
+
+        // Filter recommendation
+        val filterRecommendation = FilterSelector.selectFilterForSpecies(species, filterRepository)
+        val filterImageUrl = filterRecommendation?.imageUrl ?: ""
+        val filterName = filterRecommendation?.name ?: ""
+        val filterProductUrl = filterRecommendation?.productUrl ?: ""
+
+        // Heater recommendation
+        val heaterRecommendation = HeaterSelector.selectHeaterForSpecies(species, heaterRepository)
+        val heaterImageUrl = heaterRecommendation?.imageUrl ?: ""
+        val heaterName = heaterRecommendation?.name ?: ""
+        val heaterProductUrl = heaterRecommendation?.productUrl ?: ""
 
         return "<!-- wp:nichetablewpwp/niche-table {\"tableStyle\":\"border-bottom-each-row\\u002d\\u002daround-table\",\"nthrColor\":\"#f9f9f9\",\"block_id\":\"a48269d8-7959-4194-b6f8-48d4e0977013\",\"rHoverEffect\":true,\"textAlignIn\":\"text_center\",\"verticalAlign\":\"alignmiddel\"} -->\n" +
                 "<div><table id=\"nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013\" class=\"niche_table ms_enable  text_center alignmiddel border-bottom-each-row--around-table tr-hover-effect\" width=\"100%\"><!-- wp:nichetablewpwp/tablerowhead -->\n" +
@@ -261,66 +279,66 @@ data class SpeciesPostTemplate(
                 "\n" +
                 "<!-- wp:nichetablewpwp/tablerow -->\n" +
                 "<tr><!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"pImage\",\"imgeExternal\":true,\"externalUrl\":\"" +
-                tankProductImageUrls[0] +
+                tankImageUrl +
                 "\"} -->\n" +
                 "<td class=\"tdimg\"><img src=\"" +
-                tankProductImageUrls[0] +
+                tankImageUrl +
                 "\"/></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata -->\n" +
                 "<td>" +
-                tankProductNames[0] +
+                tankName +
                 " </td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"button\",\"buttonType\":\"typetwo\"} -->\n" +
                 "<td><a class=\"table-button typetwo\" href=\"" +
-                tankProductUrls[0] +
+                tankProductUrl +
                 "\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Buy on Amazon</a></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata --></tr>\n" +
                 "<!-- /wp:nichetablewpwp/tablerow -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tablerow -->\n" +
                 "<tr><!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"pImage\",\"imgeExternal\":true,\"externalUrl\":\"" +
-                tankProductImageUrls[1] +
+                filterImageUrl +
                 "\"} -->\n" +
                 "<td class=\"tdimg\"><img src=\"" +
-                tankProductImageUrls[1] +
+                filterImageUrl +
                 "\"/></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata -->\n" +
                 "<td>" +
-                tankProductNames[1] +
+                filterName +
                 "\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"button\",\"buttonType\":\"typetwo\"} -->\n" +
                 "<td><a class=\"table-button typetwo\" href=\"" +
-                tankProductUrls[1] +
+                filterProductUrl +
                 "\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Buy on Amazon</a></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata --></tr>\n" +
                 "<!-- /wp:nichetablewpwp/tablerow -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tablerow -->\n" +
                 "<tr><!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"pImage\",\"imgeExternal\":true,\"externalUrl\":\"" +
-                tankProductImageUrls[2] +
+                heaterImageUrl +
                 "\"} -->\n" +
                 "<td class=\"tdimg\"><img src=\"" +
-                tankProductImageUrls[2] +
+                heaterImageUrl +
                 "\"/></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata -->\n" +
                 "<td>" +
-                tankProductNames[2] +
+                heaterName +
                 " </td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata -->\n" +
                 "\n" +
                 "<!-- wp:nichetablewpwp/tabledata {\"tableDataIcon\":\"button\",\"buttonType\":\"typetwo\"} -->\n" +
                 "<td><a class=\"table-button typetwo\" href=\"" +
-                tankProductUrls[2] +
+                heaterProductUrl +
                 "\" target=\"_blank\" rel=\"nofollow noopener noreferrer\">Buy on Amazon</a></td>\n" +
                 "<!-- /wp:nichetablewpwp/tabledata --></tr>\n" +
                 "<!-- /wp:nichetablewpwp/tablerow --></table><style> @media only screen and (max-width: 768px){ #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(1):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(2):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(3):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(4):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(5):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(6):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(7):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(8):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(9):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(9):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(9):before{ content: ''; } #nichetablewpwp-a48269d8-7959-4194-b6f8-48d4e0977013 td:nth-of-type(9):before{ content: ''; } } @media only screen and (min-width: 768px){ .niche_table, .niche_table th, .niche_table td, .niche_table tr{ border-color: #f1f1f1 !important; } .niche_table tr:nth-child(odd){background-color:#f9f9f9 !important;} } </style></div>\n" +
