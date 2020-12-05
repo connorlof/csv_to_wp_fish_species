@@ -10,7 +10,7 @@ import com.loftydevelopment.species_csv_to_wp.util.Range
 class FoodSheet(private val rowList: List<List<String>>) {
     val numRows: Int = rowList.size
     val numColumns: Int = rowList[0].size
-    val tanks: List<Food> = parseRows()
+    val foodList: List<Food> = parseRows()
 
     private fun parseRows(): List<Food> {
         val foodList: MutableList<Food> = mutableListOf()
