@@ -42,6 +42,8 @@ class FoodSheet(private val rowList: List<List<String>>) {
 
         for (speciesString in splitSpecies) {
             val cleanedUpString = speciesString.replace("\"", "").trim()
+            if (cleanedUpString.isEmpty()) break
+
             speciesGroups.add(SpeciesGroup.valueOf(EnumStringUtil.toEnumString(cleanedUpString)))
         }
 

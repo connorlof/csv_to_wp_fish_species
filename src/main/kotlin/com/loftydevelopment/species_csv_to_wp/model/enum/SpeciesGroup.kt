@@ -20,6 +20,7 @@ enum class SpeciesGroup{
     INVERTEBRATES,
     KILLIFISH,
     KNIFEFISH,
+    KOI,
     LIVEBEARER,
     LOACHES,
     MISC,

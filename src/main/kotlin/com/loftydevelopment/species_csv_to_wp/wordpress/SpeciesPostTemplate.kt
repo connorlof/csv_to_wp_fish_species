@@ -206,17 +206,35 @@ data class SpeciesPostTemplate(
 
     private fun getFoodImageUrls(): List<String> {
         val foodList = FoodSelector.selectFoodForSpecies(species, foodRepository)
-        return foodList.map { it.imageUrl }
+        val urlList: MutableList<String> = foodList.map { it.imageUrl }.toMutableList()
+
+        while (urlList.size < 3) {
+            urlList.add("")
+        }
+
+        return urlList
     }
 
     private fun getFoodNames(): List<String> {
         val foodList = FoodSelector.selectFoodForSpecies(species, foodRepository)
-        return foodList.map { it.name }
+        val nameList: MutableList<String> = foodList.map { it.name }.toMutableList()
+
+        while (nameList.size < 3) {
+            nameList.add("")
+        }
+
+        return nameList
     }
 
     private fun getFoodProductUrls(): List<String> {
         val foodList = FoodSelector.selectFoodForSpecies(species, foodRepository)
-        return foodList.map { it.productUrl }
+        val urlList: MutableList<String> = foodList.map { it.productUrl }.toMutableList()
+
+        while (urlList.size < 3) {
+            urlList.add("")
+        }
+
+        return urlList
     }
 
     private fun tankSetupTable(): String {

@@ -14,4 +14,5 @@ enum class FoodPreference {
     FRUIT,
     WOOD,
     ALGAE,
+    KOI,
 }
