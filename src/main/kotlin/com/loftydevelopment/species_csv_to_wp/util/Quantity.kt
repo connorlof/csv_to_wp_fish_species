@@ -59,19 +59,16 @@ data class Quantity(
 
     companion object {
         fun fromString(string: String): Quantity {
-            var isInfinite = false
-            var isSingleValueOrGreater = false
-            var values: MutableList<Int> = mutableListOf()
+            val isInfinite = string.trim() == "any"
+            if (isInfinite) return Quantity(isInfinite, false, listOf())
 
-            isInfinite = string.trim() == "any"
-            isSingleValueOrGreater = string.contains("+")
+            val isSingleValueOrGreater = string.contains("+")
 
-
+            val values: MutableList<Int> = mutableListOf()
+            val stringValues = string.split(",")
+            values.addAll(stringValues.map { it.filter { c: Char ->  c.isDigit() }.trim().toInt() })
 
             return Quantity(isInfinite, isSingleValueOrGreater, values)
         }
     }
-//    val isInfinite: Boolean,
-//    val isSingleValueOrGreater: Boolean,
-//    val values: List<Int>,
 }

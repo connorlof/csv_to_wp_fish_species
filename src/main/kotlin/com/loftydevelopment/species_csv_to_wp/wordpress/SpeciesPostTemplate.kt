@@ -7,6 +7,7 @@ import com.loftydevelopment.species_csv_to_wp.repository.FilterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.FoodRepository
 import com.loftydevelopment.species_csv_to_wp.repository.HeaterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.TankRepository
+import com.loftydevelopment.species_csv_to_wp.util.EnumStringUtil
 
 data class SpeciesPostTemplate(
         val species: Species,
@@ -62,7 +63,7 @@ data class SpeciesPostTemplate(
                 "<tr><td>Scientific Name</td><td>${species.scientificName}</td></tr>" +
                 "<tr><td>Alternate Names</td><td>${species.alternateNames.joinToString()}</td></tr>" +
                 "<tr><td>Species Group</td><td>${species.speciesGroup}</td></tr>" +
-                "<tr><td>Care Level</td><td>${species.careLevel.name}</td></tr>" +
+                "<tr><td>Care Level</td><td>${EnumStringUtil.enumNameToHumanReadable(species.careLevel.name)}</td></tr>" +
                 "<tr><td>Average Adult Size</td><td>${species.avgAdultSize} inches / ?? mm</td></tr>" +
                 "<tr><td>Maximum Adult Size</td><td>${species.maxAdultSize} inches / ?? mm</td></tr>" +
                 "<tr><td>Lifespan</td><td>${species.lifespan} years</td></tr></tbody></table></figure>\n" +
@@ -92,8 +93,8 @@ data class SpeciesPostTemplate(
         val isLivePlantCompatible = if (species.isLivePlantCompatible) "yes" else "no"
 
         return "<!-- wp:list -->\n" +
-                "<ul><li><strong>Swimming Level</strong>: ${species.swimmingLevel.name}</li>" +
-                "<li><strong>Overall Aggressiveness:</strong> ${species.aggroOverall.name}</li>" +
+                "<ul><li><strong>Swimming Level</strong>: ${EnumStringUtil.enumNameToHumanReadable(species.swimmingLevel.name)}</li>" +
+                "<li><strong>Overall Aggressiveness:</strong> ${EnumStringUtil.enumNameToHumanReadable(species.aggroOverall.name)}</li>" +
                 "<li><strong>Aggressiveness Own Species:</strong> ${species.aggroOwnSpecies}</li>" +
                 "<li><strong>Aggressiveness Other Species:</strong> ${species.aggroOtherSpecies}</li>" +
                 "<li><strong>Ideal Number:</strong> ${species.idealQuantity}</li>" +
@@ -104,7 +105,7 @@ data class SpeciesPostTemplate(
 
     private fun dietTable(): String {
         return "<!-- wp:paragraph -->\n" +
-                "<p><strong>Diet Type:</strong> ${species.diet.name}<br>" +
+                "<p><strong>Diet Type:</strong> ${EnumStringUtil.enumNameToHumanReadable(species.diet.name)}<br>" +
                 "<strong>Food Preferences: </strong>${species.foodPreferences.joinToString()}</p>\n" +
                 "<!-- /wp:paragraph -->"
     }
@@ -221,10 +222,10 @@ data class SpeciesPostTemplate(
     private fun tankSetupTable(): String {
         return "<!-- wp:table -->\n" +
                 "<figure class=\"wp-block-table\"><table><tbody>" +
-                "<tr><td>Substrate</td><td>${species.substrate.name}</td></tr>" +
-                "<tr><td>Light</td><td>${species.lightLevel.name}</td></tr>" +
-                "<tr><td>Water Current</td><td>${species.waterCurrent.name}</td></tr>" +
-                "<tr><td>Decorations</td><td>${species.decorationLevel.name}</td></tr>" +
+                "<tr><td>Substrate</td><td>${EnumStringUtil.enumNameToHumanReadable(species.substrate.name)}</td></tr>" +
+                "<tr><td>Light</td><td>${EnumStringUtil.enumNameToHumanReadable(species.lightLevel.name)}</td></tr>" +
+                "<tr><td>Water Current</td><td>${EnumStringUtil.enumNameToHumanReadable(species.waterCurrent.name)}</td></tr>" +
+                "<tr><td>Decorations</td><td>${EnumStringUtil.enumNameToHumanReadable(species.decorationLevel.name)}</td></tr>" +
                 "<tr><td>Minimum Tank Size</td><td>${species.minTankSize} gallons / " +
                 "${Conversions.gallonsToLiters(species.minTankSize.toDouble())} liters</td></tr>" +
                 "</tbody></table></figure>\n" +

@@ -1,16 +1,17 @@
 package com.loftydevelopment.species_csv_to_wp.model.enum
 
 enum class FoodPreference {
-    FLAKE,
-    PELLET,
+    FLAKES,
+    PELLETS,
     LIVE,
     VEGGIES,
     FROZEN,
     FRY_FOOD,
-    GOLDFISH_FOOD,
+    GOLDFISH,
     KOI_FOOD,
-    SHRIMP_FOOD,
+    SHRIMP,
     INVERTEBRATES,
     FRUIT,
     WOOD,
+    ALGAE,
 }
