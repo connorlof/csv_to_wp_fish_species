@@ -34,8 +34,8 @@ object FoodSelector {
         }
 
         // Take top three foods with the most points
-        foodPointPairs.sortByDescending { it.second }
-        return foodPointPairs.subList(0, 2).map { it.first }
+        foodPointPairs.sortBy { it.second }
+        return foodPointPairs.subList(0, 3).map { it.first }
     }
 }
 

@@ -16,7 +16,11 @@ data class Range(
     }
 
     override fun toString(): String {
-        return "${start.roundToInt()} - ${end.roundToInt()}"
+        var string = "${start.roundToInt()} - ${end.roundToInt()}"
+
+        if (start == end) string = start.roundToInt().toString()
+
+        return string
     }
 
     fun convertFahToCelsius(): Range {

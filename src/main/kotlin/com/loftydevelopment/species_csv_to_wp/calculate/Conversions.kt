@@ -6,6 +6,10 @@ object Conversions {
     }
 
     fun fahToCelsius(fah: Double): Double {
-        return (fah - 32) * (5/9)
+        return (fah - 32) * 5 / 9
+    }
+
+    fun inchesToMm(inches: Double): Double {
+        return inches * 25.4
     }
 }

@@ -8,6 +8,7 @@ import com.loftydevelopment.species_csv_to_wp.repository.FoodRepository
 import com.loftydevelopment.species_csv_to_wp.repository.HeaterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.TankRepository
 import com.loftydevelopment.species_csv_to_wp.util.EnumStringUtil
+import java.util.jar.Attributes
 
 data class SpeciesPostTemplate(
         val species: Species,
@@ -17,25 +18,25 @@ data class SpeciesPostTemplate(
         val heaterRepository: HeaterRepository
 ) {
     fun generateOutputHtml(): String {
-        return "${topHeading()}\n\n" +
+        return "${topHeading()}\n" +
                 "${topHeadingStatsTable()}\n\n" +
-                "${generalHeading("Water Parameters")}\n\n" +
+                generalHeading("Water Parameters") +
                 "${waterParamTable()}\n\n" +
                 "${waterParamDescription()}\n\n" +
-                "${generalHeading("Compatibility")}\n\n" +
+                generalHeading("Compatibility") +
                 "${compatibilityTable()}\n\n" +
-                "${generalHeading("Diet")}\n\n" +
+                generalHeading("Diet") +
                 "${dietTable()}\n\n" +
-                "${smallHeading("Food Recommendations")}\n\n" +
-                "${foodRecommendationsDescription()}\n\n" +
+                smallHeading("Food Recommendations") +
+                foodRecommendationsDescription() +
                 "${foodRecommendationsTable()}\n\n" +
-                "${generalHeading("Tank Setup")}\n\n" +
+                generalHeading("Tank Setup") +
                 "${tankSetupTable()}\n\n" +
                 "${tankSetupDescription()}\n\n" +
-                "${smallHeading("Recommended Setup")}\n\n" +
-                "${tankRecommendationsDescription()}\n\n" +
+                smallHeading("Recommended Setup") +
+                tankRecommendationsDescription() +
                 "${tankRecommendationsTable()}\n\n" +
-                "${generalHeading("Additional Notes")}\n\n" +
+                generalHeading("Additional Notes") +
                 "${additionalNotesDescription()}\n\n"
     }
 
@@ -62,10 +63,10 @@ data class SpeciesPostTemplate(
                 "<figure class=\"wp-block-table\"><table><tbody><tr><td>Common Name</td><td>${species.commonName}</td></tr>" +
                 "<tr><td>Scientific Name</td><td>${species.scientificName}</td></tr>" +
                 "<tr><td>Alternate Names</td><td>${species.alternateNames.joinToString()}</td></tr>" +
-                "<tr><td>Species Group</td><td>${species.speciesGroup}</td></tr>" +
+                "<tr><td>Species Group</td><td>${EnumStringUtil.enumNameToHumanReadable(species.speciesGroup.name)}</td></tr>" +
                 "<tr><td>Care Level</td><td>${EnumStringUtil.enumNameToHumanReadable(species.careLevel.name)}</td></tr>" +
-                "<tr><td>Average Adult Size</td><td>${species.avgAdultSize} inches / ?? mm</td></tr>" +
-                "<tr><td>Maximum Adult Size</td><td>${species.maxAdultSize} inches / ?? mm</td></tr>" +
+                "<tr><td>Average Adult Size</td><td>${species.avgAdultSize} inches / ${Conversions.inchesToMm(species.avgAdultSize.toDouble()).toInt()} mm</td></tr>" +
+                "<tr><td>Maximum Adult Size</td><td>${species.maxAdultSize} inches / ${Conversions.inchesToMm(species.maxAdultSize.toDouble()).toInt()} mm</td></tr>" +
                 "<tr><td>Lifespan</td><td>${species.lifespan} years</td></tr></tbody></table></figure>\n" +
                 "<!-- /wp:table -->"
     }
@@ -84,8 +85,8 @@ data class SpeciesPostTemplate(
     private fun waterParamDescription(): String {
         return "<!-- /wp:table -->\n" +
                 "\n" +
-                "<!-- wp:paragraph {\"align\":\"center\"} -->\n" +
-                "<p class=\"has-text-align-center\">Note: These are the ranges tolerable for most individuals of this species. For most species towards the middle of this range is best. Keeping water parameters stable and consistent tend to be more important than hitting a specific number in most cases.</p>\n" +
+                "<!-- wp:paragraph -->\n" +
+                "<p>Note: These are the ranges tolerable for individuals of this species. Towards the middle of this range tends to be best for most species. However, keeping water parameters stable and consistent tend to be more important than hitting a specific number.</p>\n" +
                 "<!-- /wp:paragraph -->"
     }
 
@@ -94,19 +95,25 @@ data class SpeciesPostTemplate(
 
         return "<!-- wp:list -->\n" +
                 "<ul><li><strong>Swimming Level</strong>: ${EnumStringUtil.enumNameToHumanReadable(species.swimmingLevel.name)}</li>" +
-                "<li><strong>Overall Aggressiveness:</strong> ${EnumStringUtil.enumNameToHumanReadable(species.aggroOverall.name)}</li>" +
-                "<li><strong>Aggressiveness Own Species:</strong> ${species.aggroOwnSpecies}</li>" +
-                "<li><strong>Aggressiveness Other Species:</strong> ${species.aggroOtherSpecies}</li>" +
+                "<li><strong>Overall Aggressiveness:</strong> ${formatAggression(EnumStringUtil.enumNameToHumanReadable(species.aggroOverall.name))}</li>" +
+                "<li><strong>Aggressiveness Own Species:</strong> ${formatAggression(EnumStringUtil.enumNameToHumanReadable(species.aggroOwnSpecies.name))}</li>" +
+                "<li><strong>Aggressiveness Other Species:</strong> ${formatAggression(EnumStringUtil.enumNameToHumanReadable(species.aggroOtherSpecies.name))}</li>" +
                 "<li><strong>Ideal Number:</strong> ${species.idealQuantity}</li>" +
                 "<li><strong>M:F Ratio</strong> - ${species.mfRatio}</li>" +
-                "<li><strong>Live Plants:</strong> $isLivePlantCompatible</li></ul>\n" +
+                "<li><strong>Live Plants:</strong> ${isLivePlantCompatible.capitalize()}</li></ul>\n" +
                 "<!-- /wp:list -->"
+    }
+
+    private fun formatAggression(aggroString: String): String {
+        if (aggroString == "Semiaggressive") return "Semi-aggressive"
+
+        return aggroString
     }
 
     private fun dietTable(): String {
         return "<!-- wp:paragraph -->\n" +
                 "<p><strong>Diet Type:</strong> ${EnumStringUtil.enumNameToHumanReadable(species.diet.name)}<br>" +
-                "<strong>Food Preferences: </strong>${species.foodPreferences.joinToString()}</p>\n" +
+                "<strong>Food Preferences: </strong>${species.foodPreferences.joinToString().capitalize()}</p>\n" +
                 "<!-- /wp:paragraph -->"
     }
 
@@ -245,20 +252,20 @@ data class SpeciesPostTemplate(
                 "<tr><td>Water Current</td><td>${EnumStringUtil.enumNameToHumanReadable(species.waterCurrent.name)}</td></tr>" +
                 "<tr><td>Decorations</td><td>${EnumStringUtil.enumNameToHumanReadable(species.decorationLevel.name)}</td></tr>" +
                 "<tr><td>Minimum Tank Size</td><td>${species.minTankSize} gallons / " +
-                "${Conversions.gallonsToLiters(species.minTankSize.toDouble())} liters</td></tr>" +
+                "${Conversions.gallonsToLiters(species.minTankSize.toDouble()).toInt()} liters</td></tr>" +
                 "</tbody></table></figure>\n" +
                 "<!-- /wp:table -->"
     }
 
     private fun tankSetupDescription(): String {
-        return "<!-- wp:paragraph {\"align\":\"center\"} -->\n" +
-                "<p class=\"has-text-align-center\">Note: The minimum tank size refers to the tank volume for the smallest ideal adult stocking quantity seen in the compatibility section. For a species that does not have a minimum number the tank size refers to the minimum for a single adult species.</p>\n" +
+        return "<!-- wp:paragraph -->\n" +
+                "<p>Note: The minimum tank size refers to the tank volume for the smallest ideal adult stocking quantity seen in the compatibility section. For a species that does not have a minimum number the tank size refers to the minimum for a single adult species.</p>\n" +
                 "<!-- /wp:paragraph -->"
     }
 
     private fun tankRecommendationsDescription(): String {
-        return "<!-- wp:paragraph -->\n" +
-                "<p>Below are recommendations for setting up an aquarium of the minimum tank size for this species. These are Amazon Affiliate links and purchases help support the site.</p>\n" +
+        return "<!-- wp:paragraph -->" +
+                "<p>Below are recommendations for setting up an aquarium of the minimum tank size for this species. These are Amazon Affiliate links and purchases help support the site.</p>" +
                 "<!-- /wp:paragraph -->"
     }
 
@@ -368,19 +375,30 @@ data class SpeciesPostTemplate(
         var attributeString = ""
         val attributes = species.speciesAttributes
 
-        // TODO: make attribute an enum with String conversions
         for (attribute in attributes) {
-            attributeString = "$attributeString<p>$attribute</p>\n"
+            attributeString = "$attributeString<p>${getAttributeString(attribute)}</p>\n\n"
         }
 
-        if (attributes.isEmpty()) {
-            attributeString = "<p>No additional notes about this species. Have any questions? Found an error on this page? Leave a comment below.</p>\n"
+        if (attributes.isEmpty() || attributes[0] == "none") {
+            attributeString = "<p>No additional notes about this species.\n\n Have any questions about this species? Did you find an error on this page? Leave a comment below.</p>\n"
         } else {
-            attributeString = "$attributeString<p>Have any questions? Found an error on this page? Leave a comment below.</p>\n"
+            attributeString = "$attributeString<p>\n\nHave any questions about this species? Did you find an error on this page? Leave a comment below.</p>\n"
         }
 
         return "<!-- wp:paragraph -->\n" +
                 attributeString +
                 "<!-- /wp:paragraph -->"
+    }
+
+    private fun getAttributeString(attribute: String): String {
+        var outputString = ""
+
+        when (attribute) {
+            "jumper" -> outputString = "This species is known to jump or escape from aquariums. It is recommended to have a tight fitting lid"
+            "digger" -> outputString = "This species is known to dig in the substrate. Plants and decorations may be moved."
+            "fin nipper" -> outputString = "This species is know to be a fin nipper. It is not recommended to house them with fish that have long flowing fins."
+        }
+
+        return outputString
     }
 }

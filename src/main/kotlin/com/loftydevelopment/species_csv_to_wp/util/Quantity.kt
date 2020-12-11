@@ -44,7 +44,7 @@ data class Quantity(
     }
 
     override fun toString(): String {
-        if (isInfinite) return "any"
+        if (isInfinite) return "Any"
         if (isSingleValueOrGreater) return "${values[0]}+"
         if (values.size == 1) return "${values[0]}"
 

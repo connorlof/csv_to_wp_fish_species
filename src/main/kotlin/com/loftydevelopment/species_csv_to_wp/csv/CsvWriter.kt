@@ -6,6 +6,7 @@ import com.loftydevelopment.species_csv_to_wp.repository.FilterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.FoodRepository
 import com.loftydevelopment.species_csv_to_wp.repository.HeaterRepository
 import com.loftydevelopment.species_csv_to_wp.repository.TankRepository
+import com.loftydevelopment.species_csv_to_wp.util.EnumStringUtil
 import com.loftydevelopment.species_csv_to_wp.wordpress.SpeciesPostTemplate
 import com.loftydevelopment.species_csv_to_wp.wordpress.WordpressCsvRow
 
@@ -45,10 +46,11 @@ class CsvWriter(
                 .generateOutputHtml()
         val postType = "post"
         val postExcerpt = ""
-        val postCategories = "Freshwater Species, ${species.speciesGroup.name}"
-        val postTags = "${species.commonName}, ${species.scientificName}, ${species.aggroOverall}," +
-                "${species.alternateNames.joinToString()}, ${species.careLevel.name}, ${species.speciesGroup.name}," +
-                "care guide, freshwater"
+        val postCategories = "FRESHWATER SPECIES, ${EnumStringUtil.enumNameToHumanReadable(species.speciesGroup.name).toUpperCase()}"
+        val postTags = "${species.commonName.toUpperCase()}, ${species.scientificName.toUpperCase()}, ${species.aggroOverall}," +
+                "${species.alternateNames.joinToString().toUpperCase()}, ${species.careLevel.name}," +
+                " ${EnumStringUtil.enumNameToHumanReadable(species.speciesGroup.name).toUpperCase()}," +
+                "CARE GUIDE, FRESHWATER"
         val postDate = "now"
 
         val wordpressCsvRow = WordpressCsvRow(
