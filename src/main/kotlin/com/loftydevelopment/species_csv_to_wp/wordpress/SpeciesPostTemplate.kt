@@ -273,19 +273,19 @@ data class SpeciesPostTemplate(
         // Tank recommendation
         val tankRecommendation = TankSelector.selectTankForSpecies(species, tankRepository)
         val tankImageUrl = tankRecommendation?.imageUrl ?: ""
-        val tankName = tankRecommendation?.name ?: ""
+        val tankName = tankRecommendation?.name ?: "No tank recommendations for this species"
         val tankProductUrl = tankRecommendation?.productUrl ?: ""
 
         // Filter recommendation
         val filterRecommendation = FilterSelector.selectFilterForSpecies(species, filterRepository)
         val filterImageUrl = filterRecommendation?.imageUrl ?: ""
-        val filterName = filterRecommendation?.name ?: ""
+        val filterName = filterRecommendation?.name ?: "No filter recommendations for this species"
         val filterProductUrl = filterRecommendation?.productUrl ?: ""
 
         // Heater recommendation
         val heaterRecommendation = HeaterSelector.selectHeaterForSpecies(species, heaterRepository)
         val heaterImageUrl = heaterRecommendation?.imageUrl ?: ""
-        val heaterName = heaterRecommendation?.name ?: ""
+        val heaterName = heaterRecommendation?.name ?: "No heater recommendations for this species"
         val heaterProductUrl = heaterRecommendation?.productUrl ?: ""
 
         return "<!-- wp:nichetablewpwp/niche-table {\"tableStyle\":\"border-bottom-each-row\\u002d\\u002daround-table\",\"nthrColor\":\"#f9f9f9\",\"block_id\":\"a48269d8-7959-4194-b6f8-48d4e0977013\",\"rHoverEffect\":true,\"textAlignIn\":\"text_center\",\"verticalAlign\":\"alignmiddel\"} -->\n" +

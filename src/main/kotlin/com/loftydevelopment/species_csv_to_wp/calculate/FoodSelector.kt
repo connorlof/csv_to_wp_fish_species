@@ -15,27 +15,37 @@ object FoodSelector {
         // only check food that fits the diet type
         val foodAvailable = foodRepository.getFood().filter { isFoodProperDiet(it, speciesDietType) }
         val foodPointPairs: MutableList<Pair<Food, Int>> = foodAvailable.map { Pair(it, 0) }.toMutableList()
+        val foodPointMap: MutableMap<Food, Int> = foodPointPairs.toMap().toMutableMap()
 
-        for ((index, foodPointPair) in foodPointPairs.withIndex()) {
+        for ((food) in foodPointMap) {
             // give a point if species group matches
-            if (foodPointPair.first.speciesGroups.contains(speciesGroup)) {
-                foodPointPairs[index] = foodPointPair.copy(second = foodPointPair.second + 1)
+            if (food.speciesGroups.contains(speciesGroup)) {
+                incrementPoint(foodPointMap, food)
             }
 
             // give a point if food preference matches
-            if (speciesFoodPreferences.contains(foodPointPair.first.foodType)) {
-                foodPointPairs[index] = foodPointPair.copy(second = foodPointPair.second + 1)
+            if (speciesFoodPreferences.contains(food.foodType)) {
+                incrementPoint(foodPointMap, food)
             }
 
             // give a point if average size is in food range
-            if (foodPointPair.first.fishSize.isWithinRange(speciesSize.toDouble())) {
-                foodPointPairs[index] = foodPointPair.copy(second = foodPointPair.second + 1)
+            if (food.fishSize.isWithinRange(speciesSize.toDouble())) {
+                incrementPoint(foodPointMap, food)
             }
         }
 
+        val outputPairs: MutableList<Pair<Food, Int>> = foodPointMap.toList().toMutableList()
+
         // Take top three foods with the most points
-        foodPointPairs.sortBy { it.second }
-        return foodPointPairs.subList(0, 3).map { it.first }
+        outputPairs.sortByDescending { it.second }
+        return outputPairs.subList(0, 3).map { it.first }
+    }
+
+    fun incrementPoint(map: MutableMap<Food, Int>, key: Food) {
+        when (val count = map[key]) {
+            null -> map[key] = 1
+            else -> map[key] = count + 1
+        }
     }
 }
 
