@@ -32,4 +32,9 @@ data class Species(
         val foodPreferences: List<FoodPreference>,
         val lifespan: Range,
         val speciesAttributes: List<String>,
+        val imageUrl: String,
+        val imageSourceUrl: String,
+        val imageLicenseType: String,
+        val imageLicenseUrl: String,
+        val imageAuthor: String,
 )

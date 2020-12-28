@@ -6,7 +6,8 @@ import com.loftydevelopment.species_csv_to_wp.repository.*
 
 fun main() {
     // Species sheet reading
-    val speciesCsvPath = "C:/Users/conno/Documents/Web/Aquarium API/species.csv"
+    //val speciesCsvPath = "C:/Users/conno/Documents/Web/Aquarium API/species.csv"
+    val speciesCsvPath = "C:/Users/conno/Documents/Web/Aquarium API/species_full.csv"
     val speciesRows = CsvReader.readCsv(speciesCsvPath)
     val speciesSheet = SpeciesSheet(speciesRows)
 
@@ -17,5 +18,5 @@ fun main() {
 
     // Output
     val csvWriter = CsvWriter(foodRepository, tankRepository, filterRepository, heaterRepository)
-    csvWriter.writeCsv(csvWriter.generateSpeciesCsvOutput(speciesSheet.species))
+    csvWriter.writeCsvInSections(100, csvWriter.generateSpeciesCsvOutput(speciesSheet.species))
 }

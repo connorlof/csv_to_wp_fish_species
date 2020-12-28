@@ -18,8 +18,9 @@ object FoodSelector {
         val foodPointMap: MutableMap<Food, Int> = foodPointPairs.toMap().toMutableMap()
 
         for ((food) in foodPointMap) {
-            // give a point if species group matches
+            // give 2 points if species group matches
             if (food.speciesGroups.contains(speciesGroup)) {
+                incrementPoint(foodPointMap, food)
                 incrementPoint(foodPointMap, food)
             }
 

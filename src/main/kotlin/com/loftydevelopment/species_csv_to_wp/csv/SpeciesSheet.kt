@@ -50,6 +50,11 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
         val foodPreferences: List<FoodPreference> = parseFoodList(row[23])
         val lifespan: Range = parseLifespan(row[24])
         val speciesAttributes: List<String> = row[25].replace("\"","").split(",")
+        val imageUrl: String = row[27]
+        val imageSourceUrl: String = row[28]
+        val imageLicenseType: String = row[29]
+        val imageLicenseUrl: String = row[30]
+        val imageAuthor: String = row[31]
 
         return Species(
                 commonName,
@@ -77,7 +82,12 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
                 diet,
                 foodPreferences,
                 lifespan,
-                speciesAttributes
+                speciesAttributes,
+                imageUrl,
+                imageSourceUrl,
+                imageLicenseType,
+                imageLicenseUrl,
+                imageAuthor,
         )
     }
 
