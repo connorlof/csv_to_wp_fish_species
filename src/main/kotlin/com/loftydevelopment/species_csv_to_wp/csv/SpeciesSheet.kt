@@ -40,7 +40,7 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
         val substrate: Substrate = Substrate.valueOf(EnumStringUtil.toEnumString(row[13]))
         val lightLevel: LightLevel = LightLevel.valueOf(EnumStringUtil.toEnumString(row[14]))
         val waterCurrent: WaterCurrent = WaterCurrent.valueOf(EnumStringUtil.toEnumString(row[15]))
-        val isLivePlantCompatible: Boolean = row[16].toBoolean()
+        val isLivePlantCompatible: Boolean = parseYesNoBoolean(row[16])
         val decorationLevel: DecorationLevel = DecorationLevel.valueOf(EnumStringUtil.toEnumString(row[17]))
         val swimmingLevel: SwimmingLevel = SwimmingLevel.valueOf(EnumStringUtil.toEnumString(row[18]))
         val avgAdultSize: Float = row[19].toFloat()
@@ -108,6 +108,12 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
 
         return if (isSingleValue) Range(string.toDouble(), string.toDouble())
         else Range.fromString(string)
+    }
+
+    private fun parseYesNoBoolean(yesNoString: String): Boolean {
+        if (yesNoString.trim().toLowerCase() == " yes") return true
+
+        return false
     }
 
     override fun toString(): String {

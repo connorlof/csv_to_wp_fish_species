@@ -19,6 +19,8 @@ data class SpeciesPostTemplate(
 ) {
     fun generateOutputHtml(): String {
         return "${topHeading()}\n" +
+                "${headingImage()}\n" +
+                "${headingImageCitation()}\n" +
                 "${topHeadingStatsTable()}\n\n" +
                 generalHeading("Water Parameters") +
                 "${waterParamTable()}\n\n" +
@@ -58,6 +60,31 @@ data class SpeciesPostTemplate(
                 "<!-- /wp:heading -->"
     }
 
+    private fun headingImage(): String {
+        if (species.imageUrl.trim().isEmpty()) return ""
+
+        return "<!-- wp:image {\"sizeSlug\":\"large\",\"linkDestination\":\"none\",\"className\":\"is-style-default\"} -->\n" +
+                "<figure class=\"wp-block-image size-large is-style-default\"><img src=\"${species.imageUrl}\" alt=\"\"/></figure>\n" +
+                "<!-- /wp:image -->"
+    }
+
+    private fun headingImageCitation(): String {
+        // No Image
+        if (species.imageUrl.trim().isEmpty()) return ""
+
+        // Public Domain
+        if (species.imageLicenseType.trim() == "Public Domain") {
+            return "<!-- wp:paragraph {\"align\":\"right\"} -->\n" +
+                    "<p class=\"has-text-align-right\"><sub><sup>\"${species.commonName}\" is licensed under Public Domain (<a rel=\"noreferrer noopener nofollow\" href=\"${species.imageSourceUrl}\" data-type=\"URL\" data-id=\"${species.imageSourceUrl}\" target=\"_blank\">Original Source</a>)</sup></sub></p>\n" +
+                    "<!-- /wp:paragraph -->"
+        }
+
+        // Normal citation
+        return "<!-- wp:paragraph {\"align\":\"right\"} -->\n" +
+                "<p class=\"has-text-align-right\"><sup>\"${species.commonName}\" by ${species.imageAuthor} is licensed under <a href=\"${species.imageLicenseUrl}\" data-type=\"URL\" data-id=\"${species.imageLicenseUrl}\" target=\"_blank\" rel=\"noreferrer noopener nofollow\">${species.imageLicenseType}</a> (<a href=\"${species.imageSourceUrl}\" data-type=\"URL\" data-id=\"${species.imageSourceUrl}\" target=\"_blank\" rel=\"noreferrer noopener nofollow\">Original Source</a>)</sup></p>\n" +
+                "<!-- /wp:paragraph -->"
+    }
+
     private fun topHeadingStatsTable(): String {
         return "<!-- wp:table -->\n" +
                 "<figure class=\"wp-block-table\"><table><tbody><tr><td>Common Name</td><td>${species.commonName}</td></tr>" +
@@ -75,8 +102,8 @@ data class SpeciesPostTemplate(
         return "<!-- wp:table -->\n" +
                 "<figure class=\"wp-block-table\"><table><tbody><tr>" +
                 "<td>pH</td><td>Temperature</td><td>Hardness (GH)</td></tr>" +
-                "<tr><td>${species.phRange}</td>" +
-                "<td>${species.temperatureRange} f / ${species.temperatureRange.convertFahToCelsius()} C</td>" +
+                "<tr><td>${species.phRange.toStringDecimal(1)}</td>" +
+                "<td>${species.temperatureRange} F / ${species.temperatureRange.convertFahToCelsius()} C</td>" +
                 "<td>${species.hardnessRange} dGH</td>" +
                 "</tr></tbody></table></figure>\n" +
                 "<!-- /wp:table -->"
@@ -113,7 +140,7 @@ data class SpeciesPostTemplate(
     private fun dietTable(): String {
         return "<!-- wp:paragraph -->\n" +
                 "<p><strong>Diet Type:</strong> ${EnumStringUtil.enumNameToHumanReadable(species.diet.name)}<br>" +
-                "<strong>Food Preferences: </strong>${species.foodPreferences.joinToString().capitalize()}</p>\n" +
+                "<strong>Food Preferences: </strong>${species.foodPreferences.joinToString().toLowerCase().capitalize()}</p>\n" +
                 "<!-- /wp:paragraph -->"
     }
 
@@ -374,15 +401,17 @@ data class SpeciesPostTemplate(
     private fun additionalNotesDescription(): String {
         var attributeString = ""
         val attributes = species.speciesAttributes
+        val endString = "Thanks for checking out this care guide. Do you have any questions about this species? " +
+                "Or did you find an error on this page? Just leave a comment below."
 
         for (attribute in attributes) {
             attributeString = "$attributeString<p>${getAttributeString(attribute)}</p>\n\n"
         }
 
         if (attributes.isEmpty() || attributes[0] == "none") {
-            attributeString = "<p>No additional notes about this species.\n\n Have any questions about this species? Did you find an error on this page? Leave a comment below.</p>\n"
+            attributeString = "<p>No additional notes about this species.\n\n$endString</p>\n"
         } else {
-            attributeString = "$attributeString<p>\n\nHave any questions about this species? Did you find an error on this page? Leave a comment below.</p>\n"
+            attributeString = "$attributeString<p>\n\n$endString</p>\n"
         }
 
         return "<!-- wp:paragraph -->\n" +

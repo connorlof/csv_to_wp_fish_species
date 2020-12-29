@@ -10,6 +10,9 @@ object TankSelector {
         val speciesTankSize = species.minTankSize
         val tanksAvailable = tankRepository.getTanks()
 
+        // Handle special case for species < 10g
+        if (speciesTankSize < 10) return tanksAvailable.closestValue(speciesTankSize)
+
         return tanksAvailable
                 .filter { it.size <= speciesTankSize }
                 .closestValue(speciesTankSize)

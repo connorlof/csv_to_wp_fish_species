@@ -23,6 +23,14 @@ data class Range(
         return string
     }
 
+    fun toStringDecimal(places: Int): String {
+        var string = "${String.format("%.${places}f", start)} - ${String.format("%.${places}f", end)}"
+
+        if (start == end) string = String.format("%.${places}f", start)
+
+        return string
+    }
+
     fun convertFahToCelsius(): Range {
         val startAsCelsius = Conversions.fahToCelsius(start)
         val endAsCelsius = Conversions.fahToCelsius(end)
