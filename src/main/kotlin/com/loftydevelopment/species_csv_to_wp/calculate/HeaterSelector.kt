@@ -10,6 +10,9 @@ object HeaterSelector {
         val speciesTankSize = species.minTankSize
         val heatersAvailable = heaterRepository.getHeaters()
 
+        // Handle special case for species < 10g
+        if (speciesTankSize < 10) return heatersAvailable.closestValue(speciesTankSize)
+
         return heatersAvailable
                 .filter { it.ratedGallons.isWithinRange(speciesTankSize.toDouble()) }
                 .closestValue(speciesTankSize)

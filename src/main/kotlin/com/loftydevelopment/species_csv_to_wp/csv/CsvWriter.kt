@@ -54,12 +54,13 @@ class CsvWriter(
         val postHtml = SpeciesPostTemplate(species, foodRepository, tankRepository, filterRepository, heaterRepository)
                 .generateOutputHtml()
         val postType = "post"
-        val postExcerpt = ""
+        val postExcerpt = "Care guide on ${species.commonName}. This species is known to be ${species.careLevel.name.toLowerCase()} " +
+                "to care for with a ${formatAggression(EnumStringUtil.enumNameToHumanReadable(species.aggroOverall.name)).toLowerCase()} temperament."
         val postCategories = "FRESHWATER SPECIES, ${EnumStringUtil.enumNameToHumanReadable(species.speciesGroup.name).toUpperCase()}"
         val postTags = "${species.commonName.toUpperCase()}, ${species.scientificName.toUpperCase()}, ${species.aggroOverall}," +
                 "${species.alternateNames.joinToString().toUpperCase()}, ${species.careLevel.name}," +
                 " ${EnumStringUtil.enumNameToHumanReadable(species.speciesGroup.name).toUpperCase()}," +
-                "CARE GUIDE, FRESHWATER+"
+                "CARE GUIDE, FRESHWATER"
         val postDate = "now"
 
         val wordpressCsvRow = WordpressCsvRow(
@@ -73,5 +74,11 @@ class CsvWriter(
         )
 
         return wordpressCsvRow.asList()
+    }
+
+    private fun formatAggression(aggroString: String): String {
+        if (aggroString == "Semiaggressive") return "Semi-aggressive"
+
+        return aggroString
     }
 }

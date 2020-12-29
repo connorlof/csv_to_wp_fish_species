@@ -75,13 +75,13 @@ data class SpeciesPostTemplate(
         // Public Domain
         if (species.imageLicenseType.trim() == "Public Domain") {
             return "<!-- wp:paragraph {\"align\":\"right\"} -->\n" +
-                    "<p class=\"has-text-align-right\"><sub><sup>\"${species.commonName}\" is licensed under Public Domain (<a rel=\"noreferrer noopener nofollow\" href=\"${species.imageSourceUrl}\" data-type=\"URL\" data-id=\"${species.imageSourceUrl}\" target=\"_blank\">Original Source</a>)</sup></sub></p>\n" +
+                    "<p class=\"has-text-align-right\"><sub><sup>\"${species.commonName}\" is licensed under Public Domain</sup></sub></p>\n" +
                     "<!-- /wp:paragraph -->"
         }
 
         // Normal citation
         return "<!-- wp:paragraph {\"align\":\"right\"} -->\n" +
-                "<p class=\"has-text-align-right\"><sup>\"${species.commonName}\" by ${species.imageAuthor} is licensed under <a href=\"${species.imageLicenseUrl}\" data-type=\"URL\" data-id=\"${species.imageLicenseUrl}\" target=\"_blank\" rel=\"noreferrer noopener nofollow\">${species.imageLicenseType}</a> (<a href=\"${species.imageSourceUrl}\" data-type=\"URL\" data-id=\"${species.imageSourceUrl}\" target=\"_blank\" rel=\"noreferrer noopener nofollow\">Original Source</a>)</sup></p>\n" +
+                "<p class=\"has-text-align-right\"><sup>\"${species.commonName}\" by ${species.imageAuthor} is licensed under <a href=\"${species.imageLicenseUrl}\" data-type=\"URL\" data-id=\"${species.imageLicenseUrl}\" target=\"_blank\" rel=\"noreferrer noopener nofollow\">${species.imageLicenseType}</a></sup></p>\n" +
                 "<!-- /wp:paragraph -->"
     }
 
@@ -402,7 +402,7 @@ data class SpeciesPostTemplate(
         var attributeString = ""
         val attributes = species.speciesAttributes
         val endString = "Thanks for checking out this care guide. Do you have any questions about this species? " +
-                "Or did you find an error on this page? Just leave a comment below."
+                "Or did you find an error on the page? Just leave a comment below."
 
         for (attribute in attributes) {
             attributeString = "$attributeString<p>${getAttributeString(attribute)}</p>\n\n"

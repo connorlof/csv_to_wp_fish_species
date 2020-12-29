@@ -50,11 +50,11 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
         val foodPreferences: List<FoodPreference> = parseFoodList(row[23])
         val lifespan: Range = parseLifespan(row[24])
         val speciesAttributes: List<String> = row[25].replace("\"","").split(",")
-        val imageUrl: String = row[27]
-        val imageSourceUrl: String = row[28]
-        val imageLicenseType: String = row[29]
-        val imageLicenseUrl: String = row[30]
-        val imageAuthor: String = row[31]
+        val imageUrl: String = row[28]
+        val imageSourceUrl: String = row[29]
+        val imageLicenseType: String = row[30]
+        val imageLicenseUrl: String = row[31]
+        val imageAuthor: String = row[32]
 
         return Species(
                 commonName,
@@ -111,7 +111,7 @@ class SpeciesSheet(private val rowList: List<List<String>>) {
     }
 
     private fun parseYesNoBoolean(yesNoString: String): Boolean {
-        if (yesNoString.trim().toLowerCase() == " yes") return true
+        if (yesNoString.trim().toLowerCase() == "yes") return true
 
         return false
     }
